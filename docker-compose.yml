@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+
+    task:
+       build:
+         context: .
+         dockerfile: ${MS_TASK_HOME}/dev/Dockerfile.dev
+         args:
+             DEV_HOME : ${MS_TASK_HOME}
+       container_name: task_cn
+
+       ports:
+         - "8079:8080"
+
+       volumes:
+          - ../ms-task:${MS_TASK_HOME}
+
+       external_links:
+         - postgresdb:postgres
+
+       networks:
+         - default
+         - postgresdb_default
+
+networks:
+    default:
+    postgresdb_default:
+      external: true
+
+volumes:
+  dbdata:

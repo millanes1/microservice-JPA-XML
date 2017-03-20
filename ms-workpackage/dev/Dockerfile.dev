@@ -1,0 +1,6 @@
+FROM java:openjdk-8-jdk
+
+ADD ms-workpackage/target/workpackage-swarm.jar /opt/workpackage-swarm.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/opt/workpackage-swarm.jar"]

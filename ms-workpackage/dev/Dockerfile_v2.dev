@@ -1,0 +1,43 @@
+FROM anapsix/alpine-java:8u92b14_jdk-dcevm
+
+ARG DEV_UID
+ARG DEV_HOME
+
+ENV MAVEN_HOME /usr/share/maven
+ENV HOME $DEV_HOME
+ENV MAVEN_CONFIG $HOME/.m2
+
+
+# Create our various directories
+
+RUN mkdir -p $MAVEN_HOME && \
+    mkdir -p $MAVEN_HOME/ref \
+    mkdir -p $HOME
+
+WORKDIR $MAVEN_HOME
+
+RUN wget http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
+RUN unzip apache-maven-3.3.9-bin.zip
+
+ENV PATH $MAVEN_HOME/apache-maven-3.3.9/bin:$PATH
+
+
+VOLUME $HOME
+
+WORKDIR $HOME
+
+EXPOSE 8080
+RUN echo $PATH
+
+RUN echo $HOME
+
+RUN echo $MAVEN_CONFIG
+
+RUN  ln -s $MAVEN_HOME/apache-maven-3.3.9/bin/mvn /usr/bin/mvn
+
+# RUN ls -l $MAVEN_HOME/apache-maven-3.3.9/bin/mvn
+
+
+
+CMD (mvn package && java -jar target/workpackage-swarm.jar)
+
